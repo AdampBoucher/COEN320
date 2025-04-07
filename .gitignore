@@ -48,7 +48,6 @@ CMakeCache.txt
 cmake_install.cmake
 Makefile
 build/
-DataDisplay/build/
 
 # Logs and runtime data
 airspace_log.csv
