@@ -1,0 +1,67 @@
+﻿# ─── QNX/C++ Build Artifacts ─────────────────────────
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic Libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static Libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+atc  # your compiled binary if named this way
+
+# ─── Log and Output Files ────────────────────────────
+airspace_log.csv
+operator_log.txt
+
+# ─── macOS Hidden Files ──────────────────────────────
+.DS_Store
+
+# ─── IDE/Editor Directories ──────────────────────────
+.vscode/
+.idea/
+*.swp
+*~
+.metadata/
+
+# ─── CMake/Build Tools ───────────────────────────────
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+build/
+DataDisplay/build/
+
+# Logs and runtime data
+airspace_log.csv
+operator_log.txt
+
+# macOS
+.DS_Store
+
+# Binaries
+*.out
+*.o
+AircraftProcess
+ComputerSystem
+RadarSystem
+OperatorConsole
+DataDisplay
