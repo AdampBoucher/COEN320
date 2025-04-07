@@ -1,56 +1,122 @@
-#include "SharedData.h"
-#include "SharedMemory.h"
-
-#include <unistd.h>
-#include <cmath>
+#include "ComputerSystem.h"
 #include <iostream>
+#include <sys/shm.h>
+#include <sys/sem.h>
+#include <unistd.h>
+#include <cstring>
 
-bool isViolation(const AircraftData& a, const AircraftData& b, int lookahead) {
-    int aX = a.posX + a.spdX * lookahead;
-    int aY = a.posY + a.spdY * lookahead;
-    int aZ = a.posZ + a.spdZ * lookahead;
-
-    int bX = b.posX + b.spdX * lookahead;
-    int bY = b.posY + b.spdY * lookahead;
-    int bZ = b.posZ + b.spdZ * lookahead;
-
-    int dz = std::abs(aZ - bZ);
-    int dx = aX - bX;
-    int dy = aY - bY;
-    double dXY = std::sqrt(dx * dx + dy * dy);
-
-    return (dz < 1000 || dXY < 3000);
+// Constructor
+ComputerSystem::ComputerSystem() {
+    shm = nullptr;  // Initialize shared memory pointer
 }
 
-int main() {
-    SharedAirspace* shm = createSharedMemory(false);
+// Destructor
+ComputerSystem::~ComputerSystem() {
+    stopSystems();
+    // Cleanup shared memory if needed
+}
 
-    while (true) {
-        sleep(5);
+// Create or access shared memory
+bool ComputerSystem::createSharedMemory(bool isCreator) {
+    // Generate unique key for shared memory
+    key_t key = ftok("/tmp", 'R');
 
-        sem_wait(&shm->mutex);
-        int n = shm->n_seconds;
-        for (int i = 0; i < MAX_AIRCRAFT; ++i) {
-            if (!shm->aircraftList[i].active) continue;
-
-            for (int j = i + 1; j < MAX_AIRCRAFT; ++j) {
-                if (!shm->aircraftList[j].active) continue;
-
-                bool current = isViolation(shm->aircraftList[i], shm->aircraftList[j], 0);
-                bool future = isViolation(shm->aircraftList[i], shm->aircraftList[j], n);
-
-                if (current) {
-                    std::cout << "[ALERT] Immediate violation between "
-                              << shm->aircraftList[i].id << " and " << shm->aircraftList[j].id << "\n";
-                } else if (future) {
-                    std::cout << "[WARNING] Violation expected in " << n
-                              << "s between " << shm->aircraftList[i].id
-                              << " and " << shm->aircraftList[j].id << "\n";
-                }
-            }
-        }
-        sem_post(&shm->mutex);
+    if (key == -1) {
+        std::cerr << "Error: Could not generate key for shared memory." << std::endl;
+        return false;
     }
 
-    return 0;
+    int shmId = shmget(key, sizeof(SharedAirspace), IPC_CREAT | 0666);
+    if (shmId == -1) {
+        std::cerr << "Error: Could not allocate shared memory." << std::endl;
+        return false;
+    }
+
+    // Attach to the shared memory segment
+    shm = (SharedAirspace*) shmat(shmId, nullptr, 0);
+    if (shm == (SharedAirspace*) -1) {
+        std::cerr << "Error: Could not attach shared memory." << std::endl;
+        return false;
+    }
+
+    // Initialize shared memory (only if we are the creator)
+    if (isCreator) {
+        memset(shm, 0, sizeof(SharedAirspace));  // Clear the shared memory
+        std::cout << "Shared memory initialized." << std::endl;
+    }
+
+    return true;
+}
+
+// Initialize the computer system, set up components like comms, display, etc.
+bool ComputerSystem::initialize() {
+    if (!createSharedMemory(true)) {
+        std::cerr << "Error: Failed to create shared memory." << std::endl;
+        return false;
+    }
+
+    if (!commSystem.initialize()) {
+        std::cerr << "Error: Communication system initialization failed." << std::endl;
+        return false;
+    }
+
+    if (!dataDisplay.initialize()) {
+        std::cerr << "Error: Data display system initialization failed." << std::endl;
+        return false;
+    }
+
+    std::cout << "Computer System Initialized!" << std::endl;
+    return true;
+}
+
+// Start the individual components of the computer system (e.g., radar, aircraft)
+void ComputerSystem::startSystems() {
+    // Start aircraft systems using shared memory (simulated here)
+    manageAircraft();
+    manageRadarSystem();
+
+    std::cout << "Systems Started!" << std::endl;
+}
+
+// Stop or clean up all systems
+void ComputerSystem::stopSystems() {
+    // Example of cleaning up shared memory (detach and remove)
+    shmdt(shm);
+    std::cout << "Systems Stopped!" << std::endl;
+}
+
+// Process incoming messages (from the CommSystem)
+void ComputerSystem::processIncomingMessages() {
+    CommMessage message;
+    while (commSystem.receiveMessage(message)) {
+        std::cout << "Processing incoming message: " << message.command << std::endl;
+        commSystem.processMessage(message);
+    }
+}
+
+// Display the status of the system (useful for debugging or logging)
+void ComputerSystem::displaySystemStatus() const {
+    std::cout << "Displaying System Status..." << std::endl;
+    dataDisplay.displayAllAircraft();  // Display data from shared memory
+}
+
+// Manage aircraft (update, simulate, etc.)
+void ComputerSystem::manageAircraft() {
+    // Example: Update shared memory with aircraft data
+    SharedAirspace& airspace = *shm;
+    AircraftData data1 = {1, 1000, 1000, 10000, 200, 150, 300, true};
+    AircraftData data2 = {2, 1200, 1500, 15000, 220, 180, 310, true};
+
+    // Add aircraft data to shared memory (simplified example)
+    airspace.aircraftList.push_back(data1);
+    airspace.aircraftList.push_back(data2);
+
+    // Update display system (can read from shared memory)
+    dataDisplay.addAircraftData(data1);
+    dataDisplay.addAircraftData(data2);
+}
+
+// Manage the radar system (this can be expanded to include radar-specific logic)
+void ComputerSystem::manageRadarSystem() {
+    std::cout << "Managing Radar System..." << std::endl;
 }

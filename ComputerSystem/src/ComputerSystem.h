@@ -1,15 +1,46 @@
-/*
- * ComputerSystem.h
- *
- *  Created on: Mar 23, 2025
- *      Author: ad_bouc
- */
+#ifndef COMPUTERSYSTEM_H_
+#define COMPUTERSYSTEM_H_
 
-#ifndef SRC_COMPUTERSYSTEM_H_
-#define SRC_COMPUTERSYSTEM_H_
+#include <vector>
+#include <string>
+#include "SharedData.h"  // Shared memory structure
 
+class ComputerSystem {
+public:
+    ComputerSystem();
+    ~ComputerSystem();
 
+    // Initializes the computer system and shared memory
+    bool initialize();
 
+    // Start all systems (radar, aircraft, etc.)
+    void startSystems();
 
+    // Stop the computer system (shut down or clean up resources)
+    void stopSystems();
 
-#endif /* SRC_COMPUTERSYSTEM_H_ */
+    // Handle incoming messages from the communication system
+    void processIncomingMessages();
+
+    // Displays system status (can be used for logging or debugging)
+    void displaySystemStatus() const;
+
+private:
+    // Communication system for managing messages between systems
+    CommSystem commSystem;
+
+    // Data display for showing the aircraft data
+    DataDisplay dataDisplay;
+
+    // Shared memory structure to access aircraft and system data
+    SharedAirspace* shm;
+
+    // Internal methods for system management
+    void manageAircraft();
+    void manageRadarSystem();
+
+    // Function to create and initialize shared memory
+    bool createSharedMemory(bool isCreator);
+};
+
+#endif /* COMPUTERSYSTEM_H_ */
