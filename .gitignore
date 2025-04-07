@@ -60,8 +60,3 @@ operator_log.txt
 # Binaries
 *.out
 *.o
-AircraftProcess
-ComputerSystem
-RadarSystem
-OperatorConsole
-DataDisplay
