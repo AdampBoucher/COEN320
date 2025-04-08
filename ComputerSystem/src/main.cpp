@@ -22,17 +22,17 @@ int main() {
             for (int j = i + 1; j < MAX_AIRCRAFT; ++j) {
                 if (!shm->aircraftList[j].active) continue;
 
-                bool current = isViolation(shm->aircraftList[i], shm->aircraftList[j], 0);
-                bool future = isViolation(shm->aircraftList[i], shm->aircraftList[j], n);
-
-                if (current) {
-                    std::cout << "[ALERT] Immediate violation between "
-                              << shm->aircraftList[i].id << " and " << shm->aircraftList[j].id << "\n";
-                } else if (future) {
-                    std::cout << "[WARNING] Violation expected in " << n
-                              << "s between " << shm->aircraftList[i].id
-                              << " and " << shm->aircraftList[j].id << "\n";
-                }
+//                bool current = isViolation(shm->aircraftList[i], shm->aircraftList[j], 0);
+//                bool future = isViolation(shm->aircraftList[i], shm->aircraftList[j], n);
+//
+//                if (current) {
+//                    std::cout << "[ALERT] Immediate violation between "
+//                              << shm->aircraftList[i].id << " and " << shm->aircraftList[j].id << "\n";
+//                } else if (future) {
+//                    std::cout << "[WARNING] Violation expected in " << n
+//                              << "s between " << shm->aircraftList[i].id
+//                              << " and " << shm->aircraftList[j].id << "\n";
+//                }
             }
         }
         sem_post(&shm->mutex);

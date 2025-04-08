@@ -3,7 +3,7 @@
 #include <vector>
 #include "Aircraft.h"
 
-class Airspace {
+struct Airspace {
 private:
     std::vector<Aircraft*> aircraftList;
     const int volume[3] = {100000, 100000, 25000};

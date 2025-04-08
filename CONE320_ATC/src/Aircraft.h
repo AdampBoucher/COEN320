@@ -8,39 +8,16 @@
 #include <sys/siginfo.h>
 #include <unistd.h>
 #include <stdio.h>
-
-typedef struct {
-	int x; int y; int z;
-} position_t;
-
-typedef struct {
-	int x; int y; int z;
-} speed_t;
+#include "MemoryHelper.h"
 
 class Aircraft {
 public:
 	Aircraft();
 	Aircraft(int id, int arrivalTime, position_t arrivalPosition, speed_t arrivalSpeed);
+	void init(int id, int arrivalTime, position_t arrivalPosition, speed_t arrivalSpeed);
 
 	void start();
 	void join();
-
-	// Public data members (used during init)
-	int id;
-	int arrivalTime;
-	position_t position;
-	speed_t speed;
-
-	// === Getters needed for logger ===
-	int getId() const { return id; }
-
-	int getX() const { return position.x; }
-	int getY() const { return position.y; }
-	int getZ() const { return position.z; }
-
-	int getVx() const { return speed.x; }
-	int getVy() const { return speed.y; }
-	int getVz() const { return speed.z; }
 
 	// === Optional: For console debugging ===
 	void printStatus() const {
@@ -53,13 +30,18 @@ public:
 private:
 	bool planeArrived;
 	bool planeLeft;
+	int id;
+	int arrivalTime;
+	position_t position;
+	speed_t speed;
+	MemoryHelper memoryHelper;
 
 	pthread_t thread;
 
 	static void* startThread(void*);
 	static void timerCallback(union sigval);
-
 	void update(void);
+	aircraftData updateAircraftData();
 };
 
 #endif /* SRC_AIRCRAFT_H_ */

@@ -1,4 +1,4 @@
-ARTIFACT = ATC
+ARTIFACT = CONE320_ATC
 
 #Build architecture/variant string, possible values: x86, armv7le, etc...
 PLATFORM ?= aarch64le

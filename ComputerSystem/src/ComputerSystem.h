@@ -25,12 +25,9 @@ public:
     // Displays system status (can be used for logging or debugging)
     void displaySystemStatus() const;
 
-private:
-    // Communication system for managing messages between systems
-    CommSystem commSystem;
+    bool isViolation();
 
-    // Data display for showing the aircraft data
-    DataDisplay dataDisplay;
+private:
 
     // Shared memory structure to access aircraft and system data
     SharedAirspace* shm;

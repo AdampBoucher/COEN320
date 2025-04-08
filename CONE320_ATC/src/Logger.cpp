@@ -12,12 +12,12 @@ void Logger::logAirspace(const Airspace& airspace, int simulationTime) {
             file << "Time,ID,PosX,PosY,PosZ,SpdX,SpdY,SpdZ\n";
         }
 
-        for (const auto* aircraft : airspace.getAllAircraft()) {
-            file << simulationTime << ","
-                 << aircraft->getId() << ","
-                 << aircraft->getX() << "," << aircraft->getY() << "," << aircraft->getZ() << ","
-                 << aircraft->getVx() << "," << aircraft->getVy() << "," << aircraft->getVz() << "\n";
-        }
+//        for (const auto* aircraft : airspace.getAllAircraft()) {
+//            file << simulationTime << ","
+//                 << aircraft->getId() << ","
+//                 << aircraft->getX() << "," << aircraft->getY() << "," << aircraft->getZ() << ","
+//                 << aircraft->getVx() << "," << aircraft->getVy() << "," << aircraft->getVz() << "\n";
+//        }
 
         file.close();
     }

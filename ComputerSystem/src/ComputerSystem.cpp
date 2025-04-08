@@ -1,6 +1,6 @@
 #include "ComputerSystem.h"
 #include <iostream>
-#include <sys/shm.h>
+#include <sys/mman.h>
 #include <sys/sem.h>
 #include <unistd.h>
 #include <cstring>
@@ -26,18 +26,18 @@ bool ComputerSystem::createSharedMemory(bool isCreator) {
         return false;
     }
 
-    int shmId = shmget(key, sizeof(SharedAirspace), IPC_CREAT | 0666);
-    if (shmId == -1) {
-        std::cerr << "Error: Could not allocate shared memory." << std::endl;
-        return false;
-    }
-
-    // Attach to the shared memory segment
-    shm = (SharedAirspace*) shmat(shmId, nullptr, 0);
-    if (shm == (SharedAirspace*) -1) {
-        std::cerr << "Error: Could not attach shared memory." << std::endl;
-        return false;
-    }
+//    int shmId = shmget(key, sizeof(SharedAirspace), IPC_CREAT | 0666);
+//    if (shmId == -1) {
+//        std::cerr << "Error: Could not allocate shared memory." << std::endl;
+//        return false;
+//    }
+//
+//    // Attach to the shared memory segment
+//    shm = (SharedAirspace*) shmat(shmId, nullptr, 0);
+//    if (shm == (SharedAirspace*) -1) {
+//        std::cerr << "Error: Could not attach shared memory." << std::endl;
+//        return false;
+//    }
 
     // Initialize shared memory (only if we are the creator)
     if (isCreator) {
@@ -55,15 +55,15 @@ bool ComputerSystem::initialize() {
         return false;
     }
 
-    if (!commSystem.initialize()) {
-        std::cerr << "Error: Communication system initialization failed." << std::endl;
-        return false;
-    }
-
-    if (!dataDisplay.initialize()) {
-        std::cerr << "Error: Data display system initialization failed." << std::endl;
-        return false;
-    }
+//    if (!commSystem.initialize()) {
+//        std::cerr << "Error: Communication system initialization failed." << std::endl;
+//        return false;
+//    }
+//
+//    if (!dataDisplay.initialize()) {
+//        std::cerr << "Error: Data display system initialization failed." << std::endl;
+//        return false;
+//    }
 
     std::cout << "Computer System Initialized!" << std::endl;
     return true;
@@ -81,42 +81,48 @@ void ComputerSystem::startSystems() {
 // Stop or clean up all systems
 void ComputerSystem::stopSystems() {
     // Example of cleaning up shared memory (detach and remove)
-    shmdt(shm);
+    // shmdt(shm);
     std::cout << "Systems Stopped!" << std::endl;
 }
 
 // Process incoming messages (from the CommSystem)
 void ComputerSystem::processIncomingMessages() {
-    CommMessage message;
-    while (commSystem.receiveMessage(message)) {
-        std::cout << "Processing incoming message: " << message.command << std::endl;
-        commSystem.processMessage(message);
-    }
+//    CommMessage message;
+//    while (commSystem.receiveMessage(message)) {
+//        std::cout << "Processing incoming message: " << message.command << std::endl;
+//        commSystem.processMessage(message);
+//    }
 }
 
 // Display the status of the system (useful for debugging or logging)
 void ComputerSystem::displaySystemStatus() const {
     std::cout << "Displaying System Status..." << std::endl;
-    dataDisplay.displayAllAircraft();  // Display data from shared memory
+    // dataDisplay.displayAllAircraft();  // Display data from shared memory
 }
 
 // Manage aircraft (update, simulate, etc.)
 void ComputerSystem::manageAircraft() {
     // Example: Update shared memory with aircraft data
     SharedAirspace& airspace = *shm;
-    AircraftData data1 = {1, 1000, 1000, 10000, 200, 150, 300, true};
-    AircraftData data2 = {2, 1200, 1500, 15000, 220, 180, 310, true};
+//    AircraftData data1 = {1, 1000, 1000, 10000, 200, 150, 300, true};
+//    AircraftData data2 = {2, 1200, 1500, 15000, 220, 180, 310, true};
 
     // Add aircraft data to shared memory (simplified example)
-    airspace.aircraftList.push_back(data1);
-    airspace.aircraftList.push_back(data2);
+//    airspace.aircraftList.push_back(data1);
+//    airspace.aircraftList.push_back(data2);
 
     // Update display system (can read from shared memory)
-    dataDisplay.addAircraftData(data1);
-    dataDisplay.addAircraftData(data2);
+//    dataDisplay.addAircraftData(data1);
+//    dataDisplay.addAircraftData(data2);
 }
 
 // Manage the radar system (this can be expanded to include radar-specific logic)
 void ComputerSystem::manageRadarSystem() {
     std::cout << "Managing Radar System..." << std::endl;
 }
+
+//bool isViolation(Aircraft aircraft1, Aircraft aircraft2) {
+//
+//}
+
+
