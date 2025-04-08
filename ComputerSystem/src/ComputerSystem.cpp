@@ -26,19 +26,6 @@ bool ComputerSystem::createSharedMemory(bool isCreator) {
         return false;
     }
 
-//    int shmId = shmget(key, sizeof(SharedAirspace), IPC_CREAT | 0666);
-//    if (shmId == -1) {
-//        std::cerr << "Error: Could not allocate shared memory." << std::endl;
-//        return false;
-//    }
-//
-//    // Attach to the shared memory segment
-//    shm = (SharedAirspace*) shmat(shmId, nullptr, 0);
-//    if (shm == (SharedAirspace*) -1) {
-//        std::cerr << "Error: Could not attach shared memory." << std::endl;
-//        return false;
-//    }
-
     // Initialize shared memory (only if we are the creator)
     if (isCreator) {
         memset(shm, 0, sizeof(SharedAirspace));  // Clear the shared memory
@@ -54,16 +41,6 @@ bool ComputerSystem::initialize() {
         std::cerr << "Error: Failed to create shared memory." << std::endl;
         return false;
     }
-
-//    if (!commSystem.initialize()) {
-//        std::cerr << "Error: Communication system initialization failed." << std::endl;
-//        return false;
-//    }
-//
-//    if (!dataDisplay.initialize()) {
-//        std::cerr << "Error: Data display system initialization failed." << std::endl;
-//        return false;
-//    }
 
     std::cout << "Computer System Initialized!" << std::endl;
     return true;
@@ -120,9 +97,4 @@ void ComputerSystem::manageAircraft() {
 void ComputerSystem::manageRadarSystem() {
     std::cout << "Managing Radar System..." << std::endl;
 }
-
-//bool isViolation(Aircraft aircraft1, Aircraft aircraft2) {
-//
-//}
-
 
