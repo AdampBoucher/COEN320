@@ -11,7 +11,7 @@
 #include "MemoryHelper.h"
 
 int main(void) {
-	puts("Hello World!!!");
+	// puts("Hello World!!!");
 
 	//initialize aircrafts
 	int arrivalTime = 2;
@@ -28,6 +28,7 @@ int main(void) {
 	speed.y = 2000;
 	speed.z = 200;
 	aircraft[1].init(1, 20, position, speed);
+	aircraft[2].init(2, 20, position, speed);
 	for (int i = 0; i < 2; i++)
 		aircraft[i].start();
 

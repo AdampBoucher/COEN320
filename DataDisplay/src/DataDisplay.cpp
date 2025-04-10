@@ -1,10 +1,8 @@
 #include "MemoryHelper.h"
-
 #include <iostream>
 #include <vector>
 #include <unistd.h>
 #include <iomanip>
-
 
 class DataDisplay {
 public:
@@ -21,7 +19,6 @@ public:
         }
     }
 
-
     void print() {
             std::cout << "  ";
             for (int i = 0; i < width; ++i) {
@@ -31,7 +28,6 @@ public:
 
             for (int i = 0; i < height; ++i) {
                 std::cout << i << "\t ";
-
                 for (int j = 0; j < width; ++j) {
                     std::cout << grid[i][j] << "\t ";
                 }
@@ -49,16 +45,12 @@ int main() {
 
     aircraftData data;
 	while (1) {
-
-		for(int i = 0; i < 2; i++) {
+		for(int i = 0; i < 3; i++) {
 			data = memHelp.getData(i);
 			grid.placeDot(data.id, data.position.x/10000, data.position.y/10000);
 		}
 		grid.print();
 	    sleep(5);
 	}
-
-
-
     return 0;
 }

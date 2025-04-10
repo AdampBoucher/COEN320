@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include "SharedData.h"  // Shared memory structure
+#include "MemoryHelper.h"
 
 class ComputerSystem {
 public:
@@ -25,7 +25,7 @@ public:
     // Displays system status (can be used for logging or debugging)
     void displaySystemStatus() const;
 
-    bool isViolation();
+    bool isViolation(aircraftData datai, aircraftData dataj);
 
 private:
 
